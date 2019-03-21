@@ -28,10 +28,6 @@
     <Compile Include="..\..\vostok.commons.helpers\Vostok.Commons.Helpers\Extensions\TaskExtensions.cs" Link="Commons\TaskExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Vostok.ZooKeeper.Client">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\vostok.zookeeper.client\Vostok.ZooKeeper.Client\bin\Release\netstandard2.0\Vostok.ZooKeeper.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Vostok.ZooKeeper.Client.Abstractions">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\vostok.zookeeper.client.abstractions\Vostok.ZooKeeper.Client.Abstractions\bin\Release\netstandard2.0\Vostok.ZooKeeper.Client.Abstractions.dll</HintPath>
@@ -70,9 +66,7 @@
       <MergeAssemblies Include="$(ProjectDir)$(OutputPath)$(AssemblyName).dll" />
       <MergeAssemblies Include="$(PubDir)*.dll" />
       <MergeAssemblies Remove="$(PubDir)$(AssemblyName).dll" />
-      <MergeAssemblies Remove="$(PubDir)Vostok.Logging.Abstractions.dll" />
       <MergeAssemblies Remove="$(PubDir)Vostok.ZooKeeper.Client.Abstractions.dll" />
-      <MergeAssemblies Remove="$(PubDir)Vostok.ZooKeeper.Client.dll" />
     </ItemGroup>
     <Exec WorkingDirectory="$(PubDir)" Command="$(ILRepackExecutable) /internalize /renameInternalized /log:ilrepack.log /lib:&quot;$(PubDirWithoutSlash)&quot; /out:$(ProjectDir)$(OutputPath)$(AssemblyName).dll @(MergeAssemblies->'%(RelativeDir)%(FileName)%(Extension)', ' ')" />
   </Target>

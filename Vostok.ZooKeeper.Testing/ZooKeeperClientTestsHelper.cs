@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Vostok.Commons.Helpers.Extensions;
 using Vostok.Commons.Time;
-using Vostok.ZooKeeper.Client;
 using Vostok.ZooKeeper.Client.Abstractions.Model;
 using ZooKeeperNetExClient = org.apache.zookeeper.ZooKeeper;
 
@@ -13,9 +12,6 @@ namespace Vostok.ZooKeeper.Testing
     [PublicAPI]
     public static class ZooKeeperClientTestsHelper
     {
-        public static Task KillSession(ZooKeeperClient client, string connectionString, TimeSpan timeout) =>
-            KillSession(client.SessionId, client.SessionPassword, client.OnConnectionStateChanged, connectionString, timeout);
-
         public static async Task KillSession(long sessionId, byte[] sessionPassword, IObservable<ConnectionState> onConnectionStateChanged, string connectionString, TimeSpan timeout)
         {
             var zooKeeper = new ZooKeeperNetExClient(connectionString, 5000, null, sessionId, sessionPassword);
