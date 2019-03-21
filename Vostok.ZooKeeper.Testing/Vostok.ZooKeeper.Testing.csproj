@@ -18,6 +18,7 @@
     <PackageProjectUrl>https://github.com/vostok/zookeeper.testing</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/vostok/zookeeper.testing/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>vostok vostok.zookeeper</PackageTags>
+    <PackageReleaseNotes>https://github.com/vostok/zookeeper.testing/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/vostok/zookeeper.testing</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
