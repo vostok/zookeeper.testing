@@ -11,6 +11,8 @@ notests *default:
   deps:
     - vostok.zookeeper.client.abstractions
     - vostok.devtools
+    - vostok.commons.time/src
+    - vostok.commons.helpers/src
 
 full-build > notests:
   build:
