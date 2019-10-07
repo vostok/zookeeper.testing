@@ -23,6 +23,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ZooKeeperNetEx" Version="3.4.12.1" />
+    <PackageReference Update="@(PackageReference)">
+      <PrivateAssets>All</PrivateAssets>
+      <Publish Condition=" '%(PackageReference.Publish)' != 'false' ">true</Publish>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\vostok.commons.time\Vostok.Commons.Time\TimeBudget.cs" Link="Commons\TimeBudget.cs" />
