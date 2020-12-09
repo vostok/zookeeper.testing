@@ -28,12 +28,15 @@ namespace Vostok.ZooKeeper.Testing
                     {
                         while (!budged.HasExpired)
                         {
-                            if (zk.getState().Equals(ZooKeeperNetExClient.States.CONNECTED))
+                            try
                             {
+                                await zk.existsAsync("/test").ConfigureAwait(false);
                                 break;
                             }
-
-                            await Task.Delay(100).ConfigureAwait(false);
+                            catch
+                            {
+                                await Task.Delay(100).ConfigureAwait(false);
+                            }
                         }
                     })
                .ConfigureAwait(false);
