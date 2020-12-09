@@ -16,7 +16,7 @@ namespace Vostok.ZooKeeper.Testing
             var observer = new WaitStateObserver(ConnectionState.Expired);
             onConnectionStateChanged.Subscribe(observer);
 
-            var budged = TimeBudget.StartNew(timeout);
+            var budget = TimeBudget.StartNew(timeout);
 
             await ZooKeeperNetExClient.Using(
                     connectionString,
@@ -24,27 +24,32 @@ namespace Vostok.ZooKeeper.Testing
                     null,
                     sessionId,
                     sessionPassword,
-                    async zk =>
-                    {
-                        while (!budged.HasExpired)
-                        {
-                            try
-                            {
-                                await zk.existsAsync("/test").ConfigureAwait(false);
-                                break;
-                            }
-                            catch
-                            {
-                                await Task.Delay(100).ConfigureAwait(false);
-                            }
-                        }
-                    })
+                    EnsureZkConnectedAndMadeWork(budget))
                .ConfigureAwait(false);
 
-            if (await observer.Signal.Task.WaitAsync(budged.Remaining).ConfigureAwait(false))
+            if (await observer.Signal.Task.WaitAsync(budget.Remaining).ConfigureAwait(false))
                 return;
 
             throw new TimeoutException($"Expected to kill session within {timeout}, but failed to do so.");
+        }
+
+        private static Func<ZooKeeperNetExClient, Task> EnsureZkConnectedAndMadeWork(TimeBudget budget)
+        {
+            return async zk =>
+            {
+                while (!budget.HasExpired)
+                {
+                    try
+                    {
+                        await zk.existsAsync("/test").ConfigureAwait(false);
+                        break;
+                    }
+                    catch
+                    {
+                        await Task.Delay(100).ConfigureAwait(false);
+                    }
+                }
+            };
         }
 
         private class WaitStateObserver : IObserver<ConnectionState>
