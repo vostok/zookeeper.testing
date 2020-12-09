@@ -14,12 +14,14 @@ namespace Vostok.ZooKeeper.Testing
     {
         public static async Task KillSession(long sessionId, byte[] sessionPassword, IObservable<ConnectionState> onConnectionStateChanged, string connectionString, TimeSpan timeout)
         {
+            var observer = new WaitStateObserver(ConnectionState.Expired);
+            onConnectionStateChanged.Subscribe(observer);
+
             var zooKeeper = new ZooKeeperNetExClient(connectionString, 5000, null, sessionId, sessionPassword);
+
             try
             {
                 var budged = TimeBudget.StartNew(timeout);
-                var observer = new WaitStateObserver(ConnectionState.Expired);
-                onConnectionStateChanged.Subscribe(observer);
 
                 while (!budged.HasExpired)
                 {
@@ -27,7 +29,8 @@ namespace Vostok.ZooKeeper.Testing
                     {
                         break;
                     }
-                    Thread.Sleep(100);
+
+                    await Task.Delay(100).ConfigureAwait(false);
                 }
 
                 await zooKeeper.closeAsync().ConfigureAwait(false);
@@ -68,5 +71,4 @@ namespace Vostok.ZooKeeper.Testing
             }
         }
     }
-
 }
