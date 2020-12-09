@@ -16,6 +16,8 @@ namespace Vostok.ZooKeeper.Testing
             var observer = new WaitStateObserver(ConnectionState.Expired);
             onConnectionStateChanged.Subscribe(observer);
 
+            var budged = TimeBudget.StartNew(timeout);
+
             await ZooKeeperNetExClient.Using(
                     connectionString,
                     5000,
@@ -24,8 +26,6 @@ namespace Vostok.ZooKeeper.Testing
                     sessionPassword,
                     async zk =>
                     {
-                        var budged = TimeBudget.StartNew(timeout);
-
                         while (!budged.HasExpired)
                         {
                             if (zk.getState().Equals(ZooKeeperNetExClient.States.CONNECTED))
@@ -35,13 +35,13 @@ namespace Vostok.ZooKeeper.Testing
 
                             await Task.Delay(100).ConfigureAwait(false);
                         }
-
-                        await zk.closeAsync().ConfigureAwait(false);
-
-                        if (!await observer.Signal.Task.WaitAsync(budged.Remaining).ConfigureAwait(false))
-                            throw new TimeoutException($"Expected to kill session within {timeout}, but failed to do so.");
                     })
                .ConfigureAwait(false);
+
+            if (await observer.Signal.Task.WaitAsync(budged.Remaining).ConfigureAwait(false))
+                return;
+
+            throw new TimeoutException($"Expected to kill session within {timeout}, but failed to do so.");
         }
 
         private class WaitStateObserver : IObserver<ConnectionState>
