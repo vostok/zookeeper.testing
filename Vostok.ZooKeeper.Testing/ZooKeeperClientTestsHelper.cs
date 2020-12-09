@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Vostok.Commons.Helpers.Extensions;
@@ -17,33 +16,32 @@ namespace Vostok.ZooKeeper.Testing
             var observer = new WaitStateObserver(ConnectionState.Expired);
             onConnectionStateChanged.Subscribe(observer);
 
-            var zooKeeper = new ZooKeeperNetExClient(connectionString, 5000, null, sessionId, sessionPassword);
-
-            try
-            {
-                var budged = TimeBudget.StartNew(timeout);
-
-                while (!budged.HasExpired)
-                {
-                    if (zooKeeper.getState().Equals(ZooKeeperNetExClient.States.CONNECTED))
+            await ZooKeeperNetExClient.Using(
+                    connectionString,
+                    5000,
+                    null,
+                    sessionId,
+                    sessionPassword,
+                    async zk =>
                     {
-                        break;
-                    }
+                        var budged = TimeBudget.StartNew(timeout);
 
-                    await Task.Delay(100).ConfigureAwait(false);
-                }
+                        while (!budged.HasExpired)
+                        {
+                            if (zk.getState().Equals(ZooKeeperNetExClient.States.CONNECTED))
+                            {
+                                break;
+                            }
 
-                await zooKeeper.closeAsync().ConfigureAwait(false);
+                            await Task.Delay(100).ConfigureAwait(false);
+                        }
 
-                if (await observer.Signal.Task.WaitAsync(budged.Remaining).ConfigureAwait(false))
-                    return;
+                        await zk.closeAsync().ConfigureAwait(false);
 
-                throw new TimeoutException($"Expected to kill session within {timeout}, but failed to do so.");
-            }
-            finally
-            {
-                await zooKeeper.closeAsync().ConfigureAwait(false);
-            }
+                        if (!await observer.Signal.Task.WaitAsync(budged.Remaining).ConfigureAwait(false))
+                            throw new TimeoutException($"Expected to kill session within {timeout}, but failed to do so.");
+                    })
+               .ConfigureAwait(false);
         }
 
         private class WaitStateObserver : IObserver<ConnectionState>
