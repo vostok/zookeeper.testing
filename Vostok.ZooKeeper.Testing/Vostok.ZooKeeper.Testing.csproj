@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZooKeeperNetEx" Version="3.4.12.1" />
+    <PackageReference Include="ZooKeeperNetEx" Version="3.4.12.4" />
   </ItemGroup>
 
   <Target Name="RepackAssemblies" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
@@ -50,6 +50,6 @@
       <MergeAssemblies Include="$(BinPath)System*.dll" />
     </ItemGroup>
     <Exec WorkingDirectory="$(BinPath)" Command="$(ILRepackExecutable) /internalize /renameInternalized /out:$(ResultAssembly) $(ResultAssembly) @(MergeAssemblies->'%(RelativeDir)%(FileName)%(Extension)', ' ')" />
-    <Delete Files="@(MergeAssemblies)"/>
+    <Delete Files="@(MergeAssemblies)" />
   </Target>
 </Project>
