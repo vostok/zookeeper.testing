@@ -33,10 +33,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\vostok.zookeeper.client.abstractions\Vostok.ZooKeeper.Client.Abstractions\bin\Release\netstandard2.0\Vostok.ZooKeeper.Client.Abstractions.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="ZooKeeperNetEx" Version="3.4.12.4" />
+    <Reference Include="ZooKeeperNetEx, Version=3.4.12.4, Culture=neutral, PublicKeyToken=42cd15de36f9b993">
+      <HintPath>Resources\ZooKeeperNetEx.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <Target Name="RepackAssemblies" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
