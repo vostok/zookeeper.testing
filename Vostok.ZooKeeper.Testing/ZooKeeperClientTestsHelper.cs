@@ -25,7 +25,7 @@ namespace Vostok.ZooKeeper.Testing
                     sessionId,
                     sessionPassword,
                     EnsureZkConnectedAndMadeWork(budget))
-               .ConfigureAwait(false);
+               .ConfigureAwait(false)
 
             if (await observer.Signal.Task.WaitAsync(budget.Remaining).ConfigureAwait(false))
                 return;
