@@ -1,6 +1,6 @@
 # Vostok.ZooKeeper.Testing
 
-[![Build status](https://ci.appveyor.com/api/projects/status/github/vostok/zookeeper.testing?svg=true&branch=master)](https://ci.appveyor.com/project/vostok/zookeeper.testing/branch/master)
+[![Build & Test & Publish](https://github.com/vostok/zookeeper.testing/actions/workflows/ci.yml/badge.svg)](https://github.com/vostok/zookeeper.testing/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/Vostok.ZooKeeper.Testing.svg)](https://www.nuget.org/packages/Vostok.ZooKeeper.Testing)
 
 This library contains some ZooKeeper test helpers.
