@@ -39,7 +39,7 @@
     <PackageReference Include="ZooKeeperNetEx" Version="3.4.12.1" />
   </ItemGroup>
 
-  <Target Name="RepackAssemblies" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="RepackAssemblies" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' And '$(TargetFramework)' != ''">
     <PropertyGroup>
       <ILRepackExecutable>dotnet "$(MSBuildThisFileDirectory)../../vostok.devtools.ilrepack.bin/netcoreapp2.1/ILRepack.Core.dll"</ILRepackExecutable>
       <BinPath>$(ProjectDir)$(OutputPath)</BinPath>
