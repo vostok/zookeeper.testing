@@ -32,7 +32,7 @@ namespace Vostok.ZooKeeper.Testing
 
                 await zooKeeper.closeAsync().ConfigureAwait(false);
 
-                if (await observer.Signal.Task.WaitAsync(budged.Remaining).ConfigureAwait(false))
+                if (await observer.Signal.Task.TryWaitAsync(budged.Remaining).ConfigureAwait(false))
                     return;
 
                 throw new TimeoutException($"Expected to kill session within {timeout}, but failed to do so.");
