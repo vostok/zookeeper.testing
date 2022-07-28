@@ -1,0 +1,2 @@
+static Vostok.ZooKeeper.Testing.ZooKeeperClientTestsHelper.KillSession(long sessionId, byte[] sessionPassword, System.IObservable<Vostok.ZooKeeper.Client.Abstractions.Model.ConnectionState> onConnectionStateChanged, string connectionString, System.TimeSpan timeout) -> System.Threading.Tasks.Task
+Vostok.ZooKeeper.Testing.ZooKeeperClientTestsHelper
